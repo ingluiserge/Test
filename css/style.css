@@ -1,0 +1,257 @@
+body {
+    background-color: #E5E5E5;
+}
+
+.poke-button-enable {
+    height: 40px;
+    width: 180px;
+    border-radius: 20px;
+    background-color: red;
+    color: white;
+    outline: none;
+    border: none;
+    font-size: 18px;
+}
+
+.toggle-favorite{
+    margin-top: 20px;
+    margin-right: 20px;
+    float: right;
+}
+
+.poke-button-modal {
+    margin-top: 20px;
+    margin-left: 20px;
+    float: left;
+}
+
+.poke-button-disable {
+    height: 40px;
+    width: 180px;
+    border-radius: 20px;
+    background-color: grey;
+    color: white;
+    outline: none;
+    border: none;
+    font-size: 18px;
+}
+
+@media (max-width: 600px) {
+
+    /* mobile */ 
+
+    .list-content {
+        max-width: 360px;
+        min-width: 360px;
+    }
+}
+
+.pokemon-item {
+    background-color: #F9F9F9;
+    border-radius: 6px;
+    height: 40px;
+    margin-bottom: 4px;    
+}
+
+.list-content {
+    max-width: 500px;
+    margin: auto;
+}
+
+.circle {
+    min-height : 30px;
+    min-width: 30px;
+    max-height : 30px;
+    max-width: 30px;
+    border-radius: 15px;
+    background-color: #F5F5F5;
+    float: right;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.circle2 {
+    min-height : 40px;
+    min-width: 40px;
+    max-height : 40px;
+    max-width: 40px;
+    border-radius: 20px;
+    background-color: #F5F5F5;
+    float: right;
+    margin-top: 2px;
+    margin-right: 5px;
+}
+
+.circle2 img {
+    margin-top: 6px;
+    margin-left: 7px;
+}
+
+.pokemon-name {
+    float: left;
+    margin-top: 10px;
+    font-size: 18px;
+    margin-left: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;    
+}
+
+div span:first-child { 
+    float: left;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+div span:last-child {
+    float: left;
+    margin-left: 10px;
+}
+
+.htext{
+  text-align:center; 
+}
+
+.image-center{
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
+
+.poke-button-back{
+    height: 40px;
+    width: 180px;
+    border-radius: 20px;
+    background-color: red;
+    color: white;
+    outline: none;
+    border: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 170px;
+}
+
+
+.poke-button-hm{
+    height: 40px;
+    width: 140px;
+    border-radius: 20px;
+    background-color: red;
+    color: white;
+    outline: none;
+    border: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 580px;
+}
+
+.divisor {
+    min-height: 1px;
+    border-bottom: solid 1px gray;
+    margin: 10px 20px;
+}
+
+.search-img{
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#search {
+    background-color:rgba(0, 0, 0, 0);
+    color:black;
+    border: none;
+    outline:none;
+    height:30px;
+    transition:height 1s;
+    -webkit-transition:height 1s;
+}
+#search:focus {
+    height:50px;
+    font-size:16px;
+}
+
+.footer {
+    height: 60px;
+    min-height: 60px;
+    width: 100%;
+    position: fixed;    
+    background-color: white;
+    bottom: 0px;
+}
+
+.major-filters {
+    float: left;  
+    margin-left: 40px;
+    margin-top: 10px;
+}
+
+.minor-filters {
+    float: left;    
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.pokebola {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    background-color: #FFF;
+    border: 5px solid #000;
+    border-radius: 50%;
+    box-shadow: inset -10px 10px 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: gira 4s infinite ;
+    margin: 20px auto;
+}
+.pokebola:before, .pokebola:after {
+    content: "";
+    position: absolute;
+}
+.pokebola:before {
+    background-color: #EF4036;
+    width: 100%;
+    height: 50%;
+}
+.pokebola:after {
+    top: calc(50% - 10px);
+    width: 100%;
+    height: 20px;
+    background-color: #000;
+}
+.pokebola-botao {
+    width: 50px;
+    height: 50px;
+    background-color: #FFF;
+    border: 10px solid #000;
+    border-radius: 50%;
+    position: absolute;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+    z-index: 10;
+}
+.pokebola-botao:before {
+    content: "";
+    position: absolute;
+    top: calc(50% - 10px);
+    left: calc(50% - 10px);
+    width: 20px;
+    height: 20px;
+    background-color: #FFF;
+    border: 3px solid #000;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+@keyframes gira {
+    0% { transform: rotate(-40deg); }
+    50% { transform: rotate(120deg); }
+    100% { transform: rotate(-40deg); }
+}

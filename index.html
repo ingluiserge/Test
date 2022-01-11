@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="./css/modal.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <title></title>
+</head>
+
+<body>
+    <script type="text/x-template" id="modal-template">
+        <transition name="modal">
+          <div class="modal-mask">
+            <div class="modal-wrapper">
+              <div class="modal-container">      
+
+                <div class="modal-header">
+                    <button class="modal-default-button" @click="$emit('close')">
+                        X
+                      </button>
+                    <slot name="header">
+
+                    </slot>
+                </div>
+      
+                <div class="modal-body">
+                  <slot name="body">
+                  </slot>
+                </div>
+      
+                <div class="modal-footer">
+                  <slot name="footer">                 
+                  </slot>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
+    </script>
+
+    <div id="app">
+
+        <modal v-if="showModal" @close="showModal = false">
+            <img slot="header" height="200" width="200" :src="pokemon.sprites.other.home.front_default" />
+
+            <div slot="body">
+                <div>
+                    <span>name:</span>
+                    <span>{{ pokemon.name }}</span>
+                </div>
+                <br>
+                <div class="divisor"></div>
+                <div>
+                    <span>weight:</span>
+                    <span>{{ pokemon.weight }}</span>
+                </div>
+                <br>
+                <div class="divisor"></div>
+                <div>
+                    <span>height:</span>
+                    <span>{{ pokemon.height }}</span>
+                </div>
+                <br>
+                <div class="divisor"></div>
+                <div>
+                    <span>types:</span>
+                    <span>{{ parseTypes() }}</span>
+                </div>
+                <br>
+                <br>
+            </div>
+
+            <div slot="footer">
+                <button class="poke-button-enable poke-button-modal">share to my friends</button>
+                <div v-on:click="addToFavorite(pokemon.name)" class="toggle-favorite">
+                    <div v-if="checkFavorite(pokemon.name)" class="circle2">
+                        <img src="./images/enable.jpeg" alt="" srcset="">
+                    </div>
+                    <div v-if="!checkFavorite(pokemon.name)" class="circle2">
+                        <img src="./images/disable.jpeg" alt="" srcset="">
+                    </div>
+                </div>
+            </div>
+        </modal>
+
+        <div   v-if="!searchingState && !isLoading">
+            <img class="image-center" src="./images/pikachu-removebg-preview.png" alt="" srcset="">
+             
+            <h1 class="htext" >Welcome to pokedex!</h1>
+            <button v-on:click="moveToSearch()" class="poke-button-hm" >Get Starter</button>
+        </div>
+
+        <div v-if="isLoading">
+            <div class="pokebola">
+		<div class="pokebola-botao"></div>
+	         </div>
+        </div>
+
+        <div v-if="searchingState">
+            <div class="list-content">                
+                <br>
+                <br>
+                <div class="pokemon-item">
+                    <img class="search-img" src="./images/buscar.png" alt="" srcset="">
+                    <input v-model="searchValue" type="text" id="search" />
+                </div>
+                <br>
+                <br>
+                <div v-for="item in filterPokemons">
+                    <div v-on:click="loadPokemonData(item.name)" class="pokemon-item">
+                        <div class="pokemon-name">{{ item.name }}</div>
+                        <div v-if="checkFavorite(item.name)" class="circle">
+                            <img src="./images/enable.jpeg" alt="" srcset="">
+                        </div>
+                        <div v-if="!checkFavorite(item.name)" class="circle">
+                            <img src="./images/disable.jpeg" alt="" srcset="">
+                        </div>
+                    </div>
+                </div>
+    
+                <br>
+                <br>
+                <br>
+
+                <div v-if="noResult">
+                    <h1 class="htext" > Uh-oh!</h1>
+                    <h5 class="htext" >you look lost on your journey!</h5>
+
+                    <button v-on:click="clearsearch()" class="poke-button-back" >Go Back Home</button>
+                </div>
+                
+            </div>            
+
+            <div class="footer" >
+                <div class="list-content"> 
+                    <button v-on:click="enableAll()" v-if="isEnableAll" class="poke-button-disable major-filters">All </button>
+                    <button v-on:click="enableAll()" v-if="!isEnableAll" class="poke-button-enable major-filters">All </button>
+                    <button v-on:click="enableFavorite()" v-if="!isEnableAll" class="poke-button-disable major-filters" >Favorites</button>
+                    <button v-on:click="enableFavorite()" v-if="isEnableAll" class="poke-button-enable major-filters" >Favorites</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    Vue.component('modal', {
+        template: '#modal-template'
+    });
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!',
+            pokemons: [],
+            showModal: false,
+            favorites: [],
+            pokemon: {},
+            searchValue : "",
+            noResult : false,
+            searchingState : false,
+            isLoading : false,
+            isEnableAll : true            
+        },
+        methods: {
+
+            loadPokemon: function (data) {
+                this.pokemons = data;
+            },            
+            loadPokemonData: function (name) {
+                const url = "https://pokeapi.co/api/v2/pokemon/" + name;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.pokemon = data;
+                        this.enableModal();
+                    });
+
+            },
+            enableModal: function () {
+                this.showModal = true;
+            },
+            checkFavorite: function (name) {
+                return this.favorites.some(item => item === name);
+            },
+            addToFavorite: function (name) {
+
+                if (this.favorites.some(s => s === name)) {
+                    this.favorites = this.favorites.filter(f => f !== name);
+                } else {
+                    this.favorites.push(name);
+                }
+
+            },
+            parseTypes: function () {
+                return this.pokemon.types.map(m => m.type.name).join(', ');
+            },
+            theresnotFilterResult: function () {
+                return this.filterPokemons.lenght === 0;
+            },
+
+             clearsearch:function(){
+
+                 this.searchValue="";
+
+             },
+
+            moveToSearch: function () {
+                
+                this.isLoading = true;
+                fetch("https://pokeapi.co/api/v2/pokemon?offset=0&limit=150")
+                .then(response => response.json())
+                .then(data => {
+
+                    setTimeout(() => {
+                        this.searchingState = true;
+                        this.isLoading = false;  
+                    }, 2000);
+                    
+                    this.loadPokemon(data.results);
+                });
+            },
+            enableAll : function () {
+                this.isEnableAll = true;                                            
+            },
+            enableFavorite : function () {
+                this.isEnableAll = false;                                            
+            },
+        },
+        computed : {
+            filterPokemons : function () {
+                const result = (this.pokemons) ? this.pokemons
+                    .filter(f => 
+                        f.name.toLowerCase().indexOf(this.searchValue.toLowerCase()) !== -1
+                    ) : [];
+
+                const result2 = (this.isEnableAll) ? result : 
+                    result.filter(f => this.favorites.some(s => s === f.name.toLowerCase()));
+
+                this.noResult = (result2.length === 0);
+                
+                return result2;
+            }
+        }
+    });
+</script>
+
+</html>
